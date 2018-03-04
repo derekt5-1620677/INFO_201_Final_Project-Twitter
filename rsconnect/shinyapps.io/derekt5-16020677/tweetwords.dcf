@@ -1,0 +1,13 @@
+name: tweetwords
+title: tweetwords
+username:
+account: derekt5-16020677
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 292540
+bundleId: 1251291
+url: https://derekt5-16020677.shinyapps.io/tweetwords/
+when: 1520128655.27396
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: README.md
