@@ -1,2 +1,6 @@
 # Twitter API key
 apikey.R
+
+# R files
+.Rdata
+.Rhistory
