@@ -1,2 +1,4 @@
 # Twitter API key
 apikey.R
+apikeystreamR.R
+.httr-oauth
