@@ -1,5 +1,6 @@
 # place your server code here
-library(ggplot2)
+# install.packages("plotly")
+library(plotly)
 library(dplyr)
 library(maps)
 
@@ -13,9 +14,11 @@ available.locations.df <-
 
 us.locations.df <- filter(available.locations.df, country == "United States")
 
+
 ## Now we output a map of all the trends for each city.
 server <- function(input, output) {
+  
   output$map <- renderPlot({
-    ggplot()
+    
   })
 }
