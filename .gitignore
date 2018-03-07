@@ -1,9 +1,8 @@
 # Twitter API key
 apikey.R
-
 # New API Key
 newsapikey.R
-
 # R files
 .Rhistory
 .Rdata
+.httr-oauth

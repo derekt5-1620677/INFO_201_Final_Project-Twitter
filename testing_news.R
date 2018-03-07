@@ -12,14 +12,11 @@ source("newsapikey.R")
 base.uri <- "https://newsapi.org/v2"
 resource.uri <- "/top-headlines"
 
-# json.string.response <- GET(paste0(base.uri, resource.uri,
-#                                    "?country=us", "&sortBy=popularity"),
-#     add_headers("X-Api-Key" = news.api.key))
-
+# Get response through sending HTTPS request
 json.data.response <- GET(paste0(base.uri, resource.uri),
                             query = 
                               list("country" = "us", "sortBy" = "popularity"),
                             add_headers("X-Api-Key" = news.api.key))
-
+# Extract content as string and convert in R list format
 json.string.content <- content(json.data.response, "text")
 json.list <- fromJSON(json.string.content)
