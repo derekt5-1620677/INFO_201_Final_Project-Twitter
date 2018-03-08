@@ -3,7 +3,7 @@ library(httr)
 library(twitteR)
 library(plotly)
 
-source('apiKey.R')
+source('apikey.R')
 
 my.server <- function(input,output) {
 
