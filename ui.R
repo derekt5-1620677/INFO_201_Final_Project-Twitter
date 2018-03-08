@@ -2,6 +2,11 @@ library(shiny)
 library(dplyr)
 
 my.ui <- fluidPage(
+  
+  # Title
+  titlePanel("Tweet Words"),
+  
+  
   mainPanel(
     tabsetPanel(type = "tabs",
                 tabPanel("Popular Tweets", 
@@ -17,8 +22,9 @@ my.ui <- fluidPage(
                            textInput("city.name", label = "Enter a Country")
                          ),
                          textOutput("fl.countrytext"), 
-                         tableOutput("fl.countrytable"))
-
+                         tableOutput("fl.countrytable")),
+                tabPanel("Map Of News Interest",
+                         plotOutput("map"))
                
   )
   
