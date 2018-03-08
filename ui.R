@@ -9,6 +9,7 @@ library(maps)
 ui <-fluidPage(
   titlePanel("Info 201 Twitter Data Final Project"),
   mainPanel(
-    tabsetPanel(type = "tabs", tabPanel("Map", plotOutput("map")))
+    tabsetPanel(type = "tabs", 
+                tabPanel("Map", plotOutput("map", click = "map_click"), htmlOutput("map_info")))
   )
 )

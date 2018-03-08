@@ -54,11 +54,11 @@ shinyApp(ui, server)
 # head(ClintonTrump_tweets.df)
 # #shinyApp(ui, server)
 
-#filterStream("tweetsUS_120.json", locations = c(-125, 25, -66, 50), timeout = 120,
+# filterStream("tweetsUS_300.json", locations = c(-125, 25, -66, 50), timeout = 300,
 #             oauth = my_oauth)
-tweets_120.df <- parseTweets("tweetsUS_120.json", verbose = FALSE)
-tweets_120.df <- tweets_120.df %>% filter(!is.na(lat))
-write.csv(tweets_120.df, "tweetsUS_120.csv")
+# tweets_300.df <- parseTweets("tweetsUS_300.json", verbose = FALSE)
+# tweets_300.df <- tweets_300.df %>% filter(!is.na(lat))
+# write.csv(tweets_300.df, "tweetsUS_300.csv")
 # #flatten(tweets.df)
 # #tweets.df<- cleanTweets(tweets.df)
 # 
