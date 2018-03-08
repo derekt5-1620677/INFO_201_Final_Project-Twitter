@@ -1,4 +1,3 @@
-# reserved for app
 
 source('apiKey.R')
 

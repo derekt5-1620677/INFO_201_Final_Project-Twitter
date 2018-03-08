@@ -9,13 +9,13 @@ my.server <- function(input,output) {
 
 #Gets trends in the United States
 Trends <- getTrends("23424977")
-View(Trends)
+
 #Selects top 10 trends 
 trends.top.ten <- head(Trends, 10)
 
 #Extracts only the first column and all rows of data
 tweet.names <- trends.top.ten[, 1]
-View(tweet.names)
+
 #Makes into data frame
 tweet.names <- as.data.frame(tweet.names)
 
@@ -84,7 +84,7 @@ top.popular <- arrange.by.likes[1,1]
 
 top.liked <- arrange.by.likes[1,2]
 
-#Creates a changing text that corresponds with data table
+#Creates a changing text that corresponds with the data table
 output$text <- renderText({
   bar.info <- paste("From the data above, we can see that the most popular tweet (by most talked
                     about and most liked) at this exact momment is about",top.popular,", with",top.liked,
