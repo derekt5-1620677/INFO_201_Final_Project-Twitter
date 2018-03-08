@@ -1,9 +1,13 @@
 ##### Server Code #####
 
+# install.packages("jsonlite")
+# install.packages("httr")
 # install.packages("maps")
 # install.packages("dplyr")
 # install.packages("ggplot2")
 # install.packages("shiny")
+library(jsonlite)
+library(httr)
 library(twitteR)
 library(shiny)
 library(ggplot2)
@@ -103,7 +107,7 @@ server <- function(input, output) {
   
   output$map <- renderPlot({
     # Get the news articles popular in the US
-    source("testing_news.R")
+    json.list <- requestContent()
     top.news.articles <- json.list$articles
     news.article.title <- top.news.articles[1, "title"]
     
@@ -123,10 +127,27 @@ server <- function(input, output) {
       geom_polygon(mapping = aes(x = long, y = lat, group = group), 
                    fill = "white", color = "blue",
                    data = usa.map.df) +
-      geom_point(mapping = aes(x = longitude, y = latitude),
-                 color = adjusted.rank, size = 1, data = ultimate.us.loc.woeid.df) +
+      geom_point(mapping = aes(x = longitude, y = latitude, color = "Interest in Countrywide News"),
+                 color = adjusted.rank, data = ultimate.us.loc.woeid.df) +
       coord_quickmap()
   })
+  
+  requestContent <- function() {
+    source("newsapikey.R")
+    # URI
+    base.uri <- "https://newsapi.org/v2"
+    resource.uri <- "/top-headlines"
+    
+    # Get response through sending HTTPS request
+    json.data.response <- GET(paste0(base.uri, resource.uri),
+                              query = 
+                                list("country" = "us", "sortBy" = "popularity"),
+                              add_headers("X-Api-Key" = news.api.key))
+    # Extract content as string and convert in R list format
+    json.string.content <- content(json.data.response, "text")
+    json.list <- fromJSON(json.string.content)
+    return(json.list)
+  }
   
   
   getTrendsForAll <- function(woeids) {
