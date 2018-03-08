@@ -1,9 +1,9 @@
-# reserved for app
-
 library(shiny)
 
-source(ui.R)
+source('apikey.R')
+source('ui.R')
+source('server.R')
 
-source(server.R)
+shinyApp(ui = my.ui , server = my.server )
 
-shinyApp(ui, server)
+
