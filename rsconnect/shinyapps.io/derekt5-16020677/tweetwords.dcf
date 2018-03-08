@@ -5,9 +5,9 @@ account: derekt5-16020677
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 292540
-bundleId: 1251291
+bundleId: 1259648
 url: https://derekt5-16020677.shinyapps.io/tweetwords/
-when: 1520128655.27396
+when: 1520531070.97269
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: README.md

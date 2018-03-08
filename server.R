@@ -5,6 +5,7 @@
 # install.packages("ggplot2")
 # install.packages("shiny")
 # install.package("plotly")
+# install.packages("streamR")
 library(jsonlite)
 library(httr)
 library(twitteR)
@@ -13,6 +14,7 @@ library(ggplot2)
 library(dplyr)
 library(maps)
 library(plotly)
+library(streamR)
 
 #### Derek ####
 
@@ -244,7 +246,7 @@ my.server <- function(input,output) {
     # Get the news articles popular in the US
     json.list <- requestContent()
     top.news.articles <- json.list$articles
-    news.article.title <- top.news.articles[1, "title"]
+    news.article.title <- top.news.articles[[1]][["title"]]
     
     ## See if any of the news articles are of interest to any of the #
     ## cities in the US. ##
