@@ -34,7 +34,7 @@ ten <- trends.top.ten[10,1]
 #Views number of favorites for the most popular tweets "mixed (includes popular + real time results)"
 one.popular <- searchTwitter(one, n=1, resultType = 'mixed')
 likes.1 <- one.popular[[1]]$favoriteCount
-sentence <- one.popular[[1]]$
+
 
 two.popular <- searchTwitter(two, n=1, resultType = 'mixed')
 likes.2 <- two.popular[[1]]$favoriteCount
@@ -77,7 +77,17 @@ output$table <- renderDataTable({
 })
 
 #Arranges table in order by most liked first in a decreasing order
-arrange.by.likes <- arrange(name.and.likes, -number.of.likes)
+arrange.for.text <- arrange(name.and.likes, -number.of.likes)
+
+#selects first row and column of newly arranged data
+most.pop.arranged <- arrange.for.text[1,1]
+
+#converts to character vector
+character.arranged <- as.character(most.pop.arranged)
+
+#Searches for the text of the most popular tweet
+text.for.popular <- searchTwitter(character.arranged, n=1, resultType = 'mixed')
+text.sentence <- text.for.popular[[1]]$text
 
 #Selects rows and column of interest
 top.popular <- arrange.by.likes[1,1]
@@ -88,7 +98,7 @@ top.liked <- arrange.by.likes[1,2]
 output$text <- renderText({
   bar.info <- paste("From the data above, we can see that the most popular tweet (by most talked
                     about and most liked) at this exact momment is about",top.popular,", with",top.liked,
-                    "likes.")
+                    "likes. The tweet states",text.sentence)
   
 })
 
