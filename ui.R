@@ -5,9 +5,10 @@ my.ui <- fluidPage(
     tabsetPanel(type = "tabs",
                 tabPanel("Popular Tweets",
                 h2("Trending Tweets of the Day"),
-                dataTableOutput("table")),
-                helpText("yo"),
-                plotOutput("Plot")
+                helpText("The table below shows the top ten trending topics that are tweeted and 
+                selects the most popular (most liked) tweet in each topic."),
+                dataTableOutput("table"),
+                textOutput("text"))
                
   )
   

@@ -4,9 +4,9 @@ source('apiKey.R')
 
 library(shiny)
 
-source(ui.R)
+source('ui.R')
 
-source(server.R)
+source('server.R')
 
-shinyApp(ui, server)
+shinyApp(ui = my.ui , sever = my.server )
 
