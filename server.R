@@ -72,9 +72,10 @@ number.of.likes <- as.data.frame(number.of.likes)
 #Combines the two dataframe of intereest (tweets and number of likes)
 name.and.likes <- cbind(tweet.names, number.of.likes)
 
-output$table <- renderDataTable({
+output$table <- renderTable({
   return(name.and.likes)
 })
+
 
 #Arranges table in order by most liked first in a decreasing order
 arrange.for.text <- arrange(name.and.likes, -number.of.likes)
@@ -100,6 +101,14 @@ output$text <- renderText({
                     about and most liked) at this exact momment is about",top.popular,", with",top.liked,
                     "likes. The tweet states",text.sentence)
   
+})
+
+bargraph <- ggplot(name.and.likes) +
+geom_bar(mapping = aes(tweet.names, weight = number.of.likes))
+
+#makes name and likes data into a bar chart
+output$plot <- renderPlot({
+  return(bargraph)
 })
 
 }

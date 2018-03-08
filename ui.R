@@ -7,7 +7,8 @@ my.ui <- fluidPage(
                 h2("Current Trending Tweets"),
                 helpText("The table below shows the top ten trending topics that are tweeted in the
                           United States and selects the most popular (most liked) tweet in each topic."),
-                dataTableOutput("table"),
+                tableOutput("table"),
+                plotOutput("plot"),
                 h3("The Most Popular Tweet Currently"),
                 textOutput("text"))
                
