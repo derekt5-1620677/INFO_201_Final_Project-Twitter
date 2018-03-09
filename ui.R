@@ -4,7 +4,7 @@ library(dplyr)
 my.ui <- fluidPage(
   
   # Title
-  titlePanel("Tweet Words"),
+  titlePanel("Live Twitter Data"),
   
   
   mainPanel(
