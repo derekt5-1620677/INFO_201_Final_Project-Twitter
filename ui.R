@@ -19,12 +19,12 @@ my.ui <- fluidPage(
                          h3("The Most Popular Tweet Currently"), textOutput("text")),
                 tabPanel("Location Summary",
                          sidebarPanel(
-                           textInput("city.name", label = "Enter a Country")
-                         ),
+                           textInput("city.name", label = "Enter a Country")),
                          textOutput("fl.countrytext"), 
                          tableOutput("fl.countrytable")),
                 tabPanel("Map Of News Interest",
-                         plotOutput("map"))
+                         plotOutput("map")),
+                tabPanel("About",htmlOutput("about_tab"))
                
   )
   

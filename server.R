@@ -327,4 +327,14 @@ my.server <- function(input,output) {
   FindRank <- function(tweet.trends, lv) {
     return(match(TRUE, lv))
   }
+  
+  ### About Tab ###
+  
+  output$about_tab <- renderUI({
+    return("Welcome! This app makes use of the Twitter API and the twitteR library
+           by Jeff Gentry. Our goal is to provide various small visualizations to
+           better understand how trending tweets match up current social issues/news 
+           stories. This project is brought to you by Florrie Li, Apisara Krassner, 
+           Derek Tseng, and Andrew Wu.")
+  })
 }
