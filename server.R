@@ -171,7 +171,7 @@ my.server <- function(input,output) {
   #Combines the two dataframe of intereest (tweets and number of likes)
   name.and.likes <- cbind(tweet.names, number.of.likes)
   
-  output$table <- renderDataTable({
+  output$table <- renderTable({
     return(name.and.likes)
   })
   
@@ -373,6 +373,25 @@ my.server <- function(input,output) {
     rank <- -(adjusted.rank[row[1, "woeid"]] - 52)
     city <- row[1, "name"]
     return(paste0(city, ": ", rank))
+  })
+
+
+bargraph <- ggplot(name.and.likes) +
+geom_bar(mapping = aes(tweet.names, weight = number.of.likes))
+
+#makes name and likes data into a bar chart
+output$plot <- renderPlot({
+  return(bargraph)
+})
+
+  ### About Tab ###
+  
+  output$about_tab <- renderUI({
+    return("Welcome! This app makes use of the Twitter API and the twitteR library
+           by Jeff Gentry. Our goal is to provide various small visualizations to
+           better understand how trending tweets match up current social issues/news 
+           stories. This project is brought to you by Florrie Li, Apisara Krassner, 
+           Derek Tseng, and Andrew Wu.")
   })
 
 }
