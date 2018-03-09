@@ -39,7 +39,7 @@ fl.server <- function(input, output) {
     if (number != 1) {
       paste("cities")
     } else {
-      paste("grcity")
+      paste("city")
     }
   } 
   # prints the text
