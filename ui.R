@@ -34,7 +34,9 @@ my.ui <- fluidPage(
                                   textOutput("breaking.news.headline", container = span)),
                          textOutput("loc.and.ranking"),
                          plotOutput("map", click = "click.location")
-                         )
+                         ),
+                tabPanel("About",
+                         uiOutput("about_tab"))
                 )
     )
 )
