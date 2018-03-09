@@ -95,6 +95,7 @@ ultimate.us.loc.woeid.df <-
   ultimate.us.loc.woeid.df %>%
   filter(!is.na(latitude), !is.na(longitude), !is.na(state))
 
+
 # Load in map data
 usa.map.df <- map_data("state")
 
@@ -105,14 +106,13 @@ my.server <- function(input,output) {
       # Get the news articles popular in the US
       news.article.title <- breakingNewsTitle()
       
-      ## See if any of the news articles are of interest to any of the #
+      ## See if any of the news articles are of interest to any of the ##
       ## cities in the US. ##
       
       # Get locations
       local.woeids <- ultimate.us.loc.woeid.df[, "woeid"]
       # Now get trends for all the locations
       us.locations.local.trends <- getTrendsForAll(local.woeids)
-      head(us.locations.local.trends)
       # See if the trending words can be found in the news titles
       # and then rank
       adjusted.rank <- GetAdjustedRank()
@@ -123,8 +123,9 @@ my.server <- function(input,output) {
                      fill = "white", color = "blue",
                      data = usa.map.df) +
         geom_point(mapping = aes(x = longitude, y = latitude, color = "Interest in Countrywide News"),
-                   color = adjusted.rank, size = 2, data = ultimate.us.loc.woeid.df) +
-        scale_fill_brewer(palette = "OrRd") +
+                   color = rgb(adjusted.rank, 0, 0, maxColorValue = 51),
+                   size = 2, data = ultimate.us.loc.woeid.df) +
+        scale_color_brewer(palette = "OrRd") +
         coord_quickmap()
   })
   
@@ -135,12 +136,12 @@ my.server <- function(input,output) {
     
   
   ## Gets the most popular national headlines title as reactive function
-  breakingNewsTitle <- reactive({
+  breakingNewsTitle <- function() {
     json.list <- requestContent()
     top.news.articles <- json.list$articles
     news.article.title <- top.news.articles[[1]][["title"]]
     return(news.article.title)
-  })
+  }
     
   ## Sends HTTP request and extracts content
   requestContent <- function() {
@@ -220,20 +221,17 @@ my.server <- function(input,output) {
     
     # See if the trending words can be found in the news titles
     # and then rank
-    adjusted.rank <- FindMatchAndRankAdjustedAll(us.locations.local.trends, news.article.title)
+    adjusted.rank <- FindMatchAndRankAdjustedAll(us.locations.local.trends, breakingNewsTitle())
     return(adjusted.rank)
   })
   
   
   output$loc.and.ranking <- renderText({
-    print("Here")
     row <- nearPoints(ultimate.us.loc.woeid.df, input$click.location,
-                      threshold = 7)
-    print(row)
+                      xvar = "longitude", yvar = "latitude")
     adjusted.rank <- GetAdjustedRank()
     rank <- -(adjusted.rank[row[1, "woeid"]] - 52)
     city <- row[1, "name"]
-    print(city)
     return(paste0(city, ": ", rank))
   })
 }
