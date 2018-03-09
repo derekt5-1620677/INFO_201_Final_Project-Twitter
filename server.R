@@ -375,4 +375,12 @@ my.server <- function(input,output) {
     return(paste0(city, ": ", rank))
   })
 
+bargraph <- ggplot(name.and.likes) +
+geom_bar(mapping = aes(tweet.names, weight = number.of.likes))
+
+#makes name and likes data into a bar chart
+output$plot <- renderPlot({
+  return(bargraph)
+})
+
 }
