@@ -1,11 +1,11 @@
-##### Server Code #####
-
 # install.packages("jsonlite")
 # install.packages("httr")
 # install.packages("maps")
 # install.packages("dplyr")
 # install.packages("ggplot2")
 # install.packages("shiny")
+# install.package("plotly")
+# install.packages("streamR")
 library(jsonlite)
 library(httr)
 library(twitteR)
@@ -13,7 +13,8 @@ library(shiny)
 library(ggplot2)
 library(dplyr)
 library(maps)
-
+library(plotly)
+library(streamR)
 
 ########################## Authentication ###############################
 
@@ -94,22 +95,15 @@ ultimate.us.loc.woeid.df <-
   ultimate.us.loc.woeid.df %>%
   filter(!is.na(latitude), !is.na(longitude), !is.na(state))
 
-
-
-
-
-
-
 # Load in map data
 usa.map.df <- map_data("state")
 
-server <- function(input, output) {
-  
-  output$map <- renderPlot({
+
+my.server <- function(input,output) {
+
+    output$map <- renderPlot({
     # Get the news articles popular in the US
-    json.list <- requestContent()
-    top.news.articles <- json.list$articles
-    news.article.title <- top.news.articles[1, "title"]
+    news.article.title <- breakingNewsTitle()
     
     ## See if any of the news articles are of interest to any of the #
     ## cities in the US. ##
@@ -128,10 +122,26 @@ server <- function(input, output) {
                    fill = "white", color = "blue",
                    data = usa.map.df) +
       geom_point(mapping = aes(x = longitude, y = latitude, color = "Interest in Countrywide News"),
-                 color = adjusted.rank, data = ultimate.us.loc.woeid.df) +
+                 color = adjusted.rank, size = 2, data = ultimate.us.loc.woeid.df) +
+      scale_fill_brewer(palette = "OrRd") +
       coord_quickmap()
   })
   
+  ## Gets the most popular national headlines title as output
+  output$breaking.news.headline <- renderText({
+    return(breakingNewsTitle())
+  })
+    
+  
+  ## Gets the most popular national headlines title as reactive function
+  breakingNewsTitle <- function() {
+    json.list <- requestContent()
+    top.news.articles <- json.list$articles
+    news.article.title <- top.news.articles[[1]][["title"]]
+    return(news.article.title)
+  }
+    
+  ## Sends HTTP request and extracts content
   requestContent <- function() {
     source("newsapikey.R")
     # URI
@@ -154,6 +164,11 @@ server <- function(input, output) {
     return(lapply(woeids, getTrends))
   }
   
+  
+  ## Returns a vector that correlates color intensity with rank
+  ## of national news for the location. If rank is 1, then color intensity is 51.
+  ## (The reason for that number is to allow for when the national news is not even
+  ## in the local trends).
   FindMatchAndRankAdjustedAll <- function(list.of.us.locations.local.trends, news.article.title) {
     # us.locations.local.trends is a list of dataframes
     # Each dataframe is a set of trends from a particular city.
@@ -177,7 +192,9 @@ server <- function(input, output) {
     return(rank.final)
   }
   
-  # Returns the rank for "local.trends" of a particular city
+  # Returns the rank for national news in "local.trends" of a particular city.
+  ## 1 would be the most popular (ranked as 1st). Bigger numbers
+  ## means less popularity.
   FindMatchAndRank <- function(local.trends, news.article.title) {
     
     # Finds which local trending tweet words have words from the top news
@@ -192,6 +209,4 @@ server <- function(input, output) {
   FindRank <- function(tweet.trends, lv) {
     return(match(TRUE, lv))
   }
-  
 }
-
