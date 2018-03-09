@@ -60,12 +60,6 @@ fl.server <- function(input, output) {
   })
   # outputting the table
   output$fl.countrytable <- renderTable(fl.trends.country())
-  
-  output$fl.mytext <- renderText("This table shows the worldwide locations of trending tweets.
-                                 The data is dependent on the number of tweets in a certain
-                                 city. We want this information because it tells us where news
-                                 travels to and what type of people care (i.e. people in the 
-                                 city vs people in the suburbs).")
 }
 
 shinyApp(ui = fl.ui, server = fl.server)
