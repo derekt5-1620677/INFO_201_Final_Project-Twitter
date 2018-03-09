@@ -20,7 +20,8 @@ my.ui <- fluidPage(
                         "the point becomes. Below, we can see how interested ",
                         "the cities are in the following national headlines ",
                         textOutput("breaking.news.headline", container = span)),
-               plotOutput("map")
+               textOutput("loc.and.ranking"),
+               plotOutput("map", click = "click.location")
                )
     )
                

@@ -102,29 +102,30 @@ usa.map.df <- map_data("state")
 my.server <- function(input,output) {
 
     output$map <- renderPlot({
-    # Get the news articles popular in the US
-    news.article.title <- breakingNewsTitle()
-    
-    ## See if any of the news articles are of interest to any of the #
-    ## cities in the US. ##
-    
-    # Get locations
-    local.woeids <- ultimate.us.loc.woeid.df[, "woeid"]
-    # Now get trends for all the locations
-    us.locations.local.trends <- getTrendsForAll(local.woeids)
-    
-    # See if the trending words can be found in the news titles
-    # and then rank
-    adjusted.rank <- FindMatchAndRankAdjustedAll(us.locations.local.trends, news.article.title)
-    
-    ggplot() + 
-      geom_polygon(mapping = aes(x = long, y = lat, group = group), 
-                   fill = "white", color = "blue",
-                   data = usa.map.df) +
-      geom_point(mapping = aes(x = longitude, y = latitude, color = "Interest in Countrywide News"),
-                 color = adjusted.rank, size = 2, data = ultimate.us.loc.woeid.df) +
-      scale_fill_brewer(palette = "OrRd") +
-      coord_quickmap()
+      # Get the news articles popular in the US
+      news.article.title <- breakingNewsTitle()
+      
+      ## See if any of the news articles are of interest to any of the #
+      ## cities in the US. ##
+      
+      # Get locations
+      local.woeids <- ultimate.us.loc.woeid.df[, "woeid"]
+      # Now get trends for all the locations
+      us.locations.local.trends <- getTrendsForAll(local.woeids)
+      head(us.locations.local.trends)
+      # See if the trending words can be found in the news titles
+      # and then rank
+      adjusted.rank <- GetAdjustedRank()
+      
+      
+      ggplot() + 
+        geom_polygon(mapping = aes(x = long, y = lat, group = group), 
+                     fill = "white", color = "blue",
+                     data = usa.map.df) +
+        geom_point(mapping = aes(x = longitude, y = latitude, color = "Interest in Countrywide News"),
+                   color = adjusted.rank, size = 2, data = ultimate.us.loc.woeid.df) +
+        scale_fill_brewer(palette = "OrRd") +
+        coord_quickmap()
   })
   
   ## Gets the most popular national headlines title as output
@@ -134,12 +135,12 @@ my.server <- function(input,output) {
     
   
   ## Gets the most popular national headlines title as reactive function
-  breakingNewsTitle <- function() {
+  breakingNewsTitle <- reactive({
     json.list <- requestContent()
     top.news.articles <- json.list$articles
     news.article.title <- top.news.articles[[1]][["title"]]
     return(news.article.title)
-  }
+  })
     
   ## Sends HTTP request and extracts content
   requestContent <- function() {
@@ -184,7 +185,9 @@ my.server <- function(input,output) {
       if (is.na(rank)) {
         rank <- 51
       }
-      vector.of.ranks <- c(vector.of.ranks, rank)
+      # Extract the woeid
+      woeid <- list.of.us.locations.local.trends[[i]][1, "woeid"]
+      vector.of.ranks <- c(vector.of.ranks, c(woeid = rank))
       i <- i + 1
     }
     
@@ -209,4 +212,28 @@ my.server <- function(input,output) {
   FindRank <- function(tweet.trends, lv) {
     return(match(TRUE, lv))
   }
+  
+  GetAdjustedRank <- reactive({
+    local.woeids <- ultimate.us.loc.woeid.df[, "woeid"]
+    # Now get trends for all the locations
+    us.locations.local.trends <- getTrendsForAll(local.woeids)
+    
+    # See if the trending words can be found in the news titles
+    # and then rank
+    adjusted.rank <- FindMatchAndRankAdjustedAll(us.locations.local.trends, news.article.title)
+    return(adjusted.rank)
+  })
+  
+  
+  output$loc.and.ranking <- renderText({
+    print("Here")
+    row <- nearPoints(ultimate.us.loc.woeid.df, input$click.location,
+                      threshold = 7)
+    print(row)
+    adjusted.rank <- GetAdjustedRank()
+    rank <- -(adjusted.rank[row[1, "woeid"]] - 52)
+    city <- row[1, "name"]
+    print(city)
+    return(paste0(city, ": ", rank))
+  })
 }
